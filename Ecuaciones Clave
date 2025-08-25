@@ -1,0 +1,155 @@
+# METFI: Modelo de Electromagnetismo Toroidal de Flujo Interno
+
+## Resumen Técnico
+
+El **Modelo de Electromagnetismo Toroidal de Flujo Interno (METFI)** es una formalización matemática de sistemas complejos caracterizados por flujos toroidales y dinámica no lineal.  
+Se enfoca en:  
+
+- Atractores toroidales y su estabilidad.  
+- Bifurcaciones y umbrales críticos de reorganización.  
+- Caos controlado y reorganización sistémica.  
+- Validación en sistemas físicos (Tokamaks, plasmas astrofísicos) y bioelectromagnéticos (redes neuronales, interfaces celulares).
+
+El modelo permite cuantificar frecuencias internas, escalas temporales de transición y resiliencia estructural frente a perturbaciones externas.
+
+---
+
+## Ecuaciones Clave
+
+### Evolución de estado
+\[
+\frac{dx_i}{dt} = F_i(\mathbf{x}, \mathbf{\mu}), \quad i = 1, \dots, n
+\]
+
+- \(\mathbf{x} = (x_1, x_2, \dots, x_n)\) vector de estado.  
+- \(\mathbf{\mu}\) parámetros de control (acoplamientos toroidales, amplitudes de flujo, tasas internas).  
+
+### Helicity (invariante toroidal)
+\[
+H = \int_V \mathbf{A} \cdot \mathbf{B} \, dV, \quad \mathbf{B} = \nabla \times \mathbf{A}
+\]
+
+### Exponentes de Lyapunov
+\[
+\lambda_i = \lim_{t \to \infty} \frac{1}{t} \ln \frac{||\delta \mathbf{x}_i(t)||}{||\delta \mathbf{x}_i(0)||}
+\]
+
+- \(\lambda_{\max} > 0\) indica caos controlado.  
+
+### Condición de bifurcación de Hopf
+\[
+\Re(\lambda_{1,2}) \to 0, \quad \Im(\lambda_{1,2}) \neq 0 \Rightarrow \text{ciclo límite}
+\]
+
+---
+
+## Pseudocódigo de Simulación
+
+```python
+# Inicialización
+x = x0  # vector de estado inicial
+mu = mu0  # parámetros de control
+dt = 1e-3  # paso temporal
+T = 1000  # tiempo total de simulación
+
+# Función de evolución no lineal
+def F(x, mu):
+    # Definir dinámicas no lineales según METFI
+    # x_i' = F_i(x, mu)
+    return np.array([ ... ])  # placeholder
+
+# Integración numérica (RK4 adaptativo)
+for t in np.arange(0, T, dt):
+    k1 = F(x, mu)
+    k2 = F(x + 0.5*dt*k1, mu)
+    k3 = F(x + 0.5*dt*k2, mu)
+    k4 = F(x + dt*k3, mu)
+    x = x + (dt/6)*(k1 + 2*k2 + 2*k3 + k4)
+    
+    # Seguimiento de atractores toroidales y Lyapunov
+    lyapunov_estimate(x)
+    record_state(x, t)
+    
+    # Ajuste adaptativo del paso según tolerancia
+    dt = adjust_dt(x, mu)
+
+# Análisis post-simulación
+plot_trajectories()
+compute_bifurcation_diagram()
+compute_frequency_spectrum()
+
+# METFI: Modelo de Evolución Toroidal de Flujo Interno
+
+## Resumen Técnico
+
+El **Modelo de Evolución Toroidal de Flujo Interno (METFI)** formaliza sistemas complejos caracterizados por flujos toroidales y dinámica no lineal.  
+Permite analizar:
+
+- Atractores toroidales y su estabilidad.  
+- Bifurcaciones y umbrales críticos.  
+- Caos controlado y reorganización sistémica.  
+- Validación en sistemas físicos y bioelectromagnéticos.
+
+---
+
+## Diagramas Esquemáticos
+
+### 1. Atractor Toroidal (flujo estable)
+```text
+        +----------------+
+       /                \
+      |   ====  ====    |
+       \                /
+        +----------------+
+Representa un flujo cerrado con retroalimentación interna, persistente frente a perturbaciones pequeñas.
+### 2. Bifurcación de Hopf (transición a oscilación)
+```text
+Equilibrio estable
+       |
+       |
+       v
+  +-----------+
+  |  O --> o  |  <-- Ciclo límite emergente
+  +-----------+
+Pequeña variación en el parámetro crítico induce un ciclo límite toroidal.
+### Caos controlado (fluctuación sin colapso)
+```text
+        /\
+       /  \
+  ---/------\---
+     \      /
+      \/\  /\
+       \/\/
+Trayectorias sensibles a condiciones iniciales pero confinadas dentro de la estructura toroidal general.
+### Coexistencia de atractores múltiples
+```text
+    O         o
+   / \       / \
+  /   \     /   \
+ O     o   o     O
+Múltiples modos toroidales interactuando, generando reorganización interna sin colapso total.
+
+# Inicialización
+x = x0
+mu = mu0
+dt = 1e-3
+T = 1000
+
+def F(x, mu):
+    return np.array([ ... ])  # dinámica no lineal METFI
+
+for t in np.arange(0, T, dt):
+    k1 = F(x, mu)
+    k2 = F(x + 0.5*dt*k1, mu)
+    k3 = F(x + 0.5*dt*k2, mu)
+    k4 = F(x + dt*k3, mu)
+    x = x + (dt/6)*(k1 + 2*k2 + 2*k3 + k4)
+
+    lyapunov_estimate(x)
+    record_state(x, t)
+    dt = adjust_dt(x, mu)
+
+plot_trajectories()
+compute_bifurcation_diagram()
+compute_frequency_spectrum()
+
