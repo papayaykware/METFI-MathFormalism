@@ -1,0 +1,92 @@
+# Formalización Matemática Completa - Modelo Frank–Kamenetskii Radial
+
+Este repositorio contiene un resumen técnico del **formalismo matemático completo** aplicado a sistemas con generación volumétrica exponencial (tipo Frank–Kamenetskii), incluyendo derivación del **umbral crítico** y **perfil radial crítico**. Se centra en predicciones cuantitativas, conexión con dinámicas no lineales y atractores, y está optimizado para uso científico riguroso.  
+
+---
+
+## Contenido del repositorio
+
+- `README.md` – este documento, con resumen de ecuaciones clave y referencias comentadas.  
+- Posible implementación numérica (`Python/Matlab`) para cálculo de \(\Lambda_c\) y \(\theta_c(\rho)\) (no incluida aquí).  
+
+---
+
+## Apéndice A: Ecuaciones Clave
+
+### 1. Ecuación radial adimensional (Frank–Kamenetskii)
+\[
+\frac{1}{\rho}\frac{d}{d\rho}\Big(\rho \frac{d\theta}{d\rho}\Big) + \Lambda e^{\theta} = 0, 
+\quad 0 \le \rho \le 1, \quad \theta'(0)=0, \quad \theta(1)=0
+\]
+
+### 2. Expansión en el centro
+\[
+\theta(\rho) = \theta_0 - \frac{\Lambda e^{\theta_0}}{4}\rho^2 + \frac{\Lambda^2 e^{2\theta_0}}{64}\rho^4 + \mathcal{O}(\rho^6)
+\]
+
+### 3. Relación implícita \(\Lambda(\theta_0)\)
+\[
+F(\theta_0, \Lambda) := \theta(1; \theta_0, \Lambda) = 0
+\]
+
+### 4. Condición de punto de plegado (umbral crítico \(\Lambda_c\))
+\[
+\frac{\partial F}{\partial \theta_0} = u(1) = 0 \quad \Rightarrow \quad \Lambda_c = \max_{\theta_0} \Lambda(\theta_0)
+\]
+
+### 5. Ecuaciones variacionales para el punto de plegado
+\[
+\begin{cases}
+u'' + \frac{1}{\rho} u' + \Lambda e^{\theta} u = 0, & u(0)=1, u'(0)=0\\[2mm]
+v'' + \frac{1}{\rho} v' + \Lambda e^{\theta} v = - e^{\theta}, & v(0)=0, v'(0)=0
+\end{cases}
+\]
+
+### 6. Relación integral para derivada en el borde
+\[
+\theta_c'(1) = -\Lambda_c \int_0^1 \rho e^{\theta_c(\rho)}\, d\rho
+\]
+
+### 7. Escalado físico a radio crítico
+\[
+R_c = \sqrt{\frac{k \Lambda_c}{\beta \sigma_0 E^2}}
+\]
+
+---
+
+## Variables y parámetros
+
+| Símbolo | Descripción |
+|---------|-------------|
+| \(\theta(\rho)\) | Temperatura adimensional |
+| \(\rho = r/R\) | Radio adimensional |
+| \(\Lambda\) | Parámetro adimensional de generación vs difusión |
+| \(\Lambda_c\) | Umbral crítico de ignición (punto de plegado) |
+| \(u(\rho), v(\rho)\) | Funciones variacionales para cálculo de \(\Lambda_c\) |
+| \(R\) | Radio físico del cilindro |
+| \(k\) | Conductividad térmica |
+| \(\sigma_0 E^2\) | Prefactor de disipación volumétrica |
+| \(\beta\) | Constante de dependencia exponencial con temperatura |
+
+---
+
+## Referencias comentadas
+
+1. **Frank, H. & Kamenetskii, D. (1956)** – Introducción de la ecuación radial con generación volumétrica; base del modelo.  
+2. **Merkin, J.H. (1997)** – Explicación de puntos de plegado y bifurcaciones saddle-node en sistemas no lineales.  
+3. **Gray, P. & Scott, S.K. (1990)** – Conexión con dinámicas no lineales y atractores; relevancia para predicción de ignición.  
+4. **Bebernes, J.W. & Eberly, D. (1989)** – Desarrollo de expansiones radiales y criterios de ignición en geometrías cilíndricas y esféricas.  
+5. **Keller, H.B. (1976)** – Técnicas de shooting y collocation para BVPs; aplicable al cálculo numérico de \(\Lambda_c\).
+
+---
+
+## Notas sobre seguimiento y aplicación
+
+- La metodología permite **predecir umbrales críticos** en sistemas con generación exponencial de calor o energía.  
+- Se puede implementar un **pipeline numérico** para obtener \(\Lambda_c\) y \(\theta_c(\rho)\) usando shooting o collocation.  
+- Las ecuaciones variacionales \(u(\rho)\) y \(v(\rho)\) permiten **evaluar sensibilidad y estabilidad** del sistema, útil para seguimiento de evolución térmica o dinámica de atractores.  
+
+---
+
+**Licencia MIT**  
+Este repositorio se distribuye bajo licencia MIT, permitiendo uso y modificación libre con atribución.
