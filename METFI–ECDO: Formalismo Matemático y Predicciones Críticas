@@ -1,0 +1,115 @@
+# METFI–ECDO: Formalismo Matemático y Predicciones Críticas
+
+Este repositorio reúne el formalismo matemático del modelo **METFI–ECDO**, con las ecuaciones maestras, derivaciones analíticas y umbrales críticos.  
+Se presentan en notación **LaTeX**, compilables directamente en Markdown.
+
+---
+
+## 🔑 Ecuaciones Clave
+
+### 1. Ecuación Maestra de Energía Acoplada
+$$
+\frac{\partial E}{\partial t} 
+= \nabla \cdot ( \kappa \nabla E ) 
++ \alpha B^2 - \beta E^3
+$$
+
+- $E$ : densidad energética acoplada (núcleo–manto).  
+- $\kappa$ : difusividad térmica efectiva.  
+- $\alpha$ : coeficiente de acoplamiento electromagnético.  
+- $\beta$ : término disipativo no lineal.  
+
+---
+
+### 2. Oscilador Forzado de Resonancia
+$$
+\ddot{A}(t) + \gamma \dot{A}(t) + \omega_0^2 A(t) 
+= \epsilon \cos(\Omega t)
+$$
+
+- $A(t)$ : amplitud resonante del campo.  
+- $\omega_0$ : frecuencia natural del núcleo.  
+- $\Omega$ : frecuencia de forzamiento (solar/externa).  
+- $\gamma$ : fricción efectiva.  
+- $\epsilon$ : intensidad del forzamiento.  
+
+Condición de resonancia:
+$$
+|\Omega - \omega_0| < \delta\omega
+$$
+
+---
+
+### 3. Condición de Umbral Energético
+$$
+\alpha B^2 > \beta E^2
+$$
+
+El acoplamiento electromagnético domina sobre la disipación → inicio de transición ECDO.
+
+---
+
+### 4. Ecuación Radial Tipo Frank–Kamenetskii
+$$
+\frac{d^2 \theta}{d \xi^2} 
++ \frac{2}{\xi}\frac{d\theta}{d\xi} 
++ \Lambda e^{\theta} = 0, 
+\qquad \theta(1)=0, \quad \theta'(0)=0
+$$
+
+- $\xi = r/R$ : radio adimensional.  
+- $\theta(\xi)$ : temperatura adimensional.  
+- $\Lambda$ : parámetro de control (Rayleigh–Frank–Kamenetskii).  
+
+---
+
+### 5. Umbral Crítico (Estallido Térmico)
+$$
+\Lambda_c \approx 3.32
+$$
+
+- Si $\Lambda < \Lambda_c$: solución estable.  
+- Si $\Lambda > \Lambda_c$: no existe solución estacionaria → colapso exotérmico.  
+
+---
+
+### 6. Perfil Radial Crítico
+$$
+\theta(\xi) \approx \ln \left( \frac{1}{1 + \frac{\Lambda_c}{6} \xi^2} \right)
+$$
+
+Temperatura máxima en el centro:
+$$
+\theta(0) = \ln \left( \frac{1}{1} \right) = 0
+$$
+y decrecimiento parabólico-logarítmico hacia el borde.
+
+---
+
+### 7. Conexión con Caos y Atractores
+Definición de parámetro reducido:
+$$
+\mu = \frac{\alpha B^2}{\beta E_c^2}
+$$
+
+- $\mu < 1$: estado estable.  
+- $\mu \approx 1$: bifurcación hacia atractor límite.  
+- $\mu \gg 1$: régimen caótico.  
+
+---
+
+## 📌 Referencias Comentadas
+
+1. **Frank-Kamenetskii, D.A.** (1969). *Diffusion and Heat Exchange in Chemical Kinetics*.  
+   → Base del análisis crítico $\Lambda_c$ en problemas térmicos autoacelerados.
+
+2. **Strogatz, S.H.** (1994). *Nonlinear Dynamics and Chaos*.  
+   → Marco para bifurcaciones y atractores asociados al parámetro $\mu$.
+
+3. **Priest, E. & Forbes, T.** (2000). *Magnetic Reconnection*.  
+   → Relación entre acoplamiento electromagnético y liberación súbita de energía.
+
+4. **Landau, L.D. & Lifshitz, E.M.** (1987). *Fluid Mechanics*.  
+   → Formalismo en transporte y ecuaciones de difusión adaptado a nuestro modelo.  
+
+
