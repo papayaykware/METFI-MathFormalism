@@ -1,0 +1,123 @@
+"""
+Repositorio METFI - Simulación de resonancias toroidales núcleo-manto
+Autor: ChatGpt Javi
+Descripción: Formalización matemática, simulación de modos toroidales acoplados, cálculo de frecuencias críticas,
+energías, corrientes máximas y estimación de probabilidad de eventos críticos (ECDO locales).
+"""
+
+import numpy as np
+
+# ===============================
+# Parámetros del sistema
+# ===============================
+
+n_modos = 5  # Número de modos toroidales
+L = np.array([1e3, 2e3, 5e3, 1e4, 8e3])  # Inductancias [H]
+C = np.array([1e-4, 5e-4, 1e-3, 2e-4, 8e-4])  # Capacitancias [F]
+R = np.array([50, 60, 55, 70, 65])  # Resistencias [Ω]
+M = np.array([[0,0.1,0.05,0,0],
+              [0.1,0,0.07,0.05,0],
+              [0.05,0.07,0,0.1,0.02],
+              [0,0.05,0.1,0,0.05],
+              [0,0,0.02,0.05,0]])  # Matriz de acoplamiento
+
+F_ext_amp = 1e3  # Amplitud de excitación externa [A]
+F_ext_freq = 0.5  # Frecuencia excitación externa [Hz]
+dt = 0.01  # Paso temporal [s]
+t_max = 1000  # Tiempo total de simulación [s]
+
+# ===============================
+# Inicialización de variables
+# ===============================
+I = np.zeros((n_modos, int(t_max/dt)))  # Corrientes por modo
+dI_dt = np.zeros((n_modos, int(t_max/dt)))  # Derivadas de corrientes
+E_res = np.zeros(n_modos)  # Energía acumulada por modo
+I_umbral = np.zeros(n_modos)  # Corriente umbral para resonancia
+omega_crit = np.zeros(n_modos)  # Frecuencia crítica de cada modo
+
+# ===============================
+# Cálculo de frecuencias críticas y umbrales
+# ===============================
+for k in range(n_modos):
+    L_eff = L[k] + np.sum(M[k])
+    C_eff = C[k]
+    omega_crit[k] = 1/np.sqrt(L_eff*C_eff)
+    # Energía umbral arbitraria (ejemplo)
+    E_res[k] = 0.5 * L_eff * (1e4)**2  # [J]
+    I_umbral[k] = np.sqrt(2*E_res[k]/L_eff)
+
+# ===============================
+# Pseudocódigo de simulación
+# ===============================
+"""
+Para cada paso temporal:
+    1. Calcular excitación externa F_ext(t) = F_ext_amp * sin(2*pi*F_ext_freq*t)
+    2. Actualizar derivadas de corrientes según ecuaciones acopladas:
+        L * d^2I/dt^2 + (R + M) * dI/dt + I/C = F_ext
+    3. Integrar usando Runge-Kutta 4º orden
+    4. Calcular energía instantánea por modo:
+        E_mode = 0.5*L_eff*I[k]^2
+    5. Acumular energía total del sistema
+    6. Comparar con umbral de resonancia para cada modo
+    7. Estimar probabilidad de evento crítico:
+        P_event_mode = P(E_mode >= E_umbral)
+    8. Calcular probabilidad combinada de eventos críticos:
+        P_event_total = 1 - Π_k (1 - P_event_mode[k])
+"""
+
+# ===============================
+# Funciones auxiliares
+# ===============================
+def F_ext(t):
+    return F_ext_amp * np.sin(2*np.pi*F_ext_freq*t)
+
+def energia_mode(L_eff, I_k):
+    return 0.5 * L_eff * I_k**2
+
+def probabilidad_evento(E, E_umbral, sigma=0.1):
+    """
+    Estima probabilidad de que la energía E supere el umbral E_umbral
+    usando distribución normal aproximada
+    """
+    return 0.5 * (1 + np.erf((E - E_umbral)/(sigma*E_umbral*np.sqrt(2))))
+
+# ===============================
+# Simulación principal (bucle temporal)
+# ===============================
+n_steps = int(t_max/dt)
+P_event_total = np.zeros(n_steps)
+
+for t_step in range(1, n_steps):
+    t = t_step * dt
+    # Excitación externa
+    F_t = F_ext(t)
+    
+    # Actualización simple de corrientes (Euler para pseudocódigo)
+    for k in range(n_modos):
+        L_eff = L[k] + np.sum(M[k])
+        d2I_dt2 = (F_t - R[k]*dI_dt[k,t_step-1] - I[k,t_step-1]/C[k]) / L_eff
+        dI_dt[k,t_step] = dI_dt[k,t_step-1] + d2I_dt2*dt
+        I[k,t_step] = I[k,t_step-1] + dI_dt[k,t_step]*dt
+    
+    # Energías por modo
+    E_inst = np.array([energia_mode(L[k]+np.sum(M[k]), I[k,t_step]) for k in range(n_modos)])
+    
+    # Probabilidad de eventos por modo
+    P_modes = np.array([probabilidad_evento(E_inst[k], E_res[k]) for k in range(n_modos)])
+    
+    # Probabilidad combinada de evento crítico
+    P_event_total[t_step] = 1 - np.prod(1 - P_modes)
+
+# ===============================
+# Resultados finales
+# ===============================
+print("Frecuencias críticas (Hz):", omega_crit)
+print("Corrientes umbral (A):", I_umbral)
+print("Probabilidad de evento crítico al final de la simulación:", P_event_total[-1])
+
+# Opcional: gráficos
+# import matplotlib.pyplot as plt
+# plt.plot(np.arange(n_steps)*dt, P_event_total)
+# plt.xlabel('Tiempo [s]')
+# plt.ylabel('Probabilidad combinada de evento crítico')
+# plt.show()
